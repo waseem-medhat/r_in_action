@@ -1,0 +1,1 @@
+sink("sink_output.r", append = TRUE, split = TRUE)
