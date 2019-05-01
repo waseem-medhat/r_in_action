@@ -1,4 +1,6 @@
-## VECTORS
+
+# VECTORS -----------------------------------------------------------------
+
 a <- c("k", "j", "h", "a", "c", "m")
 
 # vector subsetting
@@ -8,7 +10,8 @@ a[c(1, 3, 5)]
 a[2:6]  # 2:6 is the same as c(2, 3, 4, 5, 6)
 
 
-## MATRICES
+# MATRICES ----------------------------------------------------------------
+
 m1 <- matrix(1:20, nrow = 5, ncol = 4)
 m1
 
@@ -42,7 +45,8 @@ m1[1,3]
 m1[1, c(3,4)]
 
 
-## ARRAYS
+# ARRAYS ------------------------------------------------------------------
+
 dim1 <- c("A1", "A2")
 dim2 <- c("B1", "B2", "B3")
 dim3 <- c("C1", "C2", "C3", "C4")
@@ -54,7 +58,7 @@ ar  # 2x3x4 array
 ar[1, 2, 1]
 
 
-## DATA FRAMES
+# DATA FRAMES -------------------------------------------------------------
 
 patientID <- c(1, 2, 3, 4)
 age <- c(25, 34, 28, 52)
@@ -76,7 +80,8 @@ patientdata <- data.frame(patientID, age, diabetes, status,
 patientdata
 
 
-## FACTORS
+# FACTORS -----------------------------------------------------------------
+
 diabetes <- factor(diabetes)
 diabetes
 
@@ -97,3 +102,18 @@ patientdata <- data.frame(patientID, age, diabetes, status,
 
 str(patientdata)
 summary(patientdata)
+
+
+# LISTS -------------------------------------------------------------------
+
+g <- "My First List"
+h <- c(25, 26, 18, 39)
+j <- matrix(1:10, nrow=5)
+k <- c("one", "two", "three")
+mylist <- list(title=g, ages=h, j, k)
+mylist
+
+# subsetting lists
+mylist[2]
+mylist[[2]]
+mylist$title
