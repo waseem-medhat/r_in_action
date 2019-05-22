@@ -2,7 +2,8 @@ library(RColorBrewer)
 
 # Basic Plot and Output ---------------------------------------------------
 
-pdf('first_plot.pdf') # direct graphics to pdf instead of R output
+# direct graphics to pdf instead of R output
+pdf('first_plot.pdf', family = "Helvetica-Narrow")
 
   plot(mtcars$wt, mtcars$mpg)
   abline(lm(mpg ~ wt, data = mtcars))
@@ -42,3 +43,23 @@ plot(dose, drugA, type = 'b',
 n <- 5
 thecolors <- brewer.pal(n, "Accent")
 pie(rep(1, n), labels = thecolors, col = thecolors)
+
+# text
+par(
+  cex       = 1,   # scale
+  cex.lab   = 1.5,
+  cex.main  = 2,
+  font.lab  = 1,
+  font.main = 3,
+  family    = "sans"
+)
+
+plot(dose, drugA, type = 'b',
+     main = "some title",
+     ) # b for BOTH lines and points
+  
+# add font families
+windowsFonts(
+  Hack = "Hack",
+  ohno = "Comic Sans MS"
+)
