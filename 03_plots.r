@@ -97,6 +97,7 @@ title(
 )
 
 # example 3.2
+
 x <- 1:10
 y <- x
 z <- 10/x
@@ -134,3 +135,130 @@ title(
 )
 
 par(default)
+
+abline(h = c(1, 5, 7), v = c(1, 2))
+
+# # #
+
+# example 3.3
+
+# data
+dose <- c(20, 30, 40, 45, 60)
+drugA <- c(16, 20, 27, 40, 60)
+drugB <- c(15, 18, 25, 31, 40)
+
+# save default parameters
+# default <- par(no.readonly = TRUE) # save defaults
+
+# change parameters
+par(lwd = 2, cex = 1.5, font.lab = 2)
+
+# main plot w/ 1st line
+plot(
+  dose, drugA, type = 'b',
+  pch = 15, lty = 1, col = 'red', ylim = c(0, 60),
+  main = "Drug A vs. Drug B",
+  xlab = "Drug Dose",
+  ylab = "Drug Response"
+)
+
+# 2nd line
+lines(
+  dose, drugB, type = 'b',
+  pch = 17, lty = 2, col = 'blue'
+)
+
+# ref line
+abline(
+  h = 30,
+  lwd = 1.5, lty = 2, col = 'gray'
+)
+
+# minor tick marks
+Hmisc::minor.tick()
+
+# legend
+legend(
+  "topleft", inset = 0.05, title = "Drug Type", c("A", "B"),
+  lty = c(1, 2), pch = c(15, 17), box.lwd = 0.5, col = c("red", "blue")
+)
+
+# reset to default parameters
+par(default)
+
+# # #
+
+# annotations
+plot(
+  mtcars$wt, mtcars$mpg,
+  pch = 18, col = "blue",
+  main = "Mileage vs. Car Weight",
+  xlab = "Weight",
+  ylab = "Mileage"
+)
+
+text(
+  mtcars$wt, mtcars$mpg,
+  row.names(mtcars),
+  cex = 0.6, pos = 4, col = "gray"
+)
+
+# fixed annotations
+par(cex=1.5)
+plot(1:7,1:7,type="n")
+text(3,3,"Example of default text")
+text(4,4,family="mono","Example of mono-spaced text")
+text(5,5,family="serif","Example of serif text")
+par(default)
+
+# math annotations
+demo(plotmath)
+
+
+# Layouts -----------------------------------------------------------------
+
+# arrange plots in r*c matrix
+par(mfrow = c(3, 1)) # mfrow fills by row; mfcol by column
+hist(mtcars$wt)
+hist(mtcars$mpg)
+hist(mtcars$disp)
+
+# more complex layout
+layout(
+  matrix(c(1, 1, 2, 3), nrow = 2, ncol = 2, byrow = TRUE),
+  widths = c(2, 1), heights = c(1, 2) # relative widths/heights of tiles
+)
+hist(mtcars$wt)
+hist(mtcars$mpg)
+hist(mtcars$disp)
+
+
+# example 3.4
+
+# save default parameters
+# default <- par(no.readonly = TRUE) # save defaults
+
+{
+  # main plot
+  par(fig = c(0, 0.8, 0, 0.8))
+  plot(
+    mtcars$wt, mtcars$mpg,
+    ylab = "Miles per Gallon",
+    xlab = "Car Weight"
+  )
+  
+  # boxplot above
+  par(fig = c(0, 0.8, 0.55, 1), new = TRUE)
+  boxplot(mtcars$wt, horizontal = TRUE, axes = FALSE)
+  
+  # boxplot to the right
+  par(fig = c(0.65, 1, 0, 0.8), new = TRUE)
+  boxplot(mtcars$wt, axes = FALSE)
+  
+  # title
+  mtext("Enhanced Scatterplot", outer = TRUE,
+        line = -5, cex = 3, family = "Hack")
+  
+  # reset parameters
+  par(default)
+}
