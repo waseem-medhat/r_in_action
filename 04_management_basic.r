@@ -68,3 +68,108 @@ leadership <- leadership %>%
     testDate  = "date"
   )
 
+
+# Missing Values ----------------------------------------
+
+# check for missing values
+is.na(leadership[ , 6:10])
+
+# other non-missing values
+is.infinite(Inf)            # Inf = infinte
+is.nan(sin(Inf))            # NaN = not a number
+
+# missing values in action
+x <- c(1, 2, NA, 5)
+x[1] + x[2] + x[3] + x[4]   # NA
+sum(x)                      # NA
+sum(x, na.rm = TRUE)        # 8
+
+# omit rows with NAs
+na.omit(leadership)
+
+
+# Dates -------------------------------------------------
+
+# convert strings to dates
+leadership$date <- as.Date(leadership$testDate, "%m/%d/%y")
+
+# date functions
+Sys.Date()
+date()
+
+today <- Sys.Date()
+format(today, format = "%A")
+
+# date arithmetic
+date_start <- as.Date("2004-02-13")
+date_end   <- as.Date("2011-01-22")
+
+date_end - date_start
+difftime(date_end, date_start, units = "mins")
+
+# convert dates to strings
+as.character(date_start)
+
+
+# Sorting -----------------------------------------------------------------
+
+with(
+  leadership,
+  leadership[order(age), ]          # sort by asc. age
+)
+
+with(
+  leadership,
+  leadership[order(gender, age), ]  # sort by asc. gender then age
+)
+
+with(
+  leadership,
+  leadership[order(gender, -age), ] # sort by asc. gender then desc. age
+)
+
+
+# Merging -----------------------------------------------------------------
+
+# horizontally, like SQL join
+# merge(dfA, dfB, by = 'ID')
+
+# horizontal concatenation
+# cbind()
+
+# adding rows
+# rbind(dfA, dfB)
+
+
+# Subsetting --------------------------------------------------------------
+
+# variables, by index
+leadership[ , 6:10]
+
+# variables, by name
+leadership[paste0("item", 1:5)]
+
+# exclude variables, by name
+leadership[ !names(leadership) %in% c("item3", "item4") ]
+
+# exclude variables, by index
+leadership[ , -6:-10]
+
+# rows, by index
+leadership[1:3, ]
+
+# rows, by condition
+leadership[leadership$gender == "M"
+           & leadership$age  > 30]
+
+# using subset()
+subset(
+  leadership,
+  age >= 35 | age < 24,
+  select = paste0("item", 1:5)
+)
+
+# random sample of rows
+leadership[
+  sample(1:nrow(leadership), size = 3, replace = FALSE)
+, ]
