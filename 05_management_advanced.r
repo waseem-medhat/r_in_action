@@ -1,4 +1,5 @@
 library(MASS)
+library(reshape2)
 
 # Statistical Functions ---------------------------------------------------
 
@@ -102,3 +103,107 @@ roster <- cbind(FirstName, LastName, roster[-1])
 roster <- roster[order(FirstName, LastName), ]
 
 roster
+
+
+# Control Structure -------------------------------------------------------
+
+# basic for loop
+for (i in 1:5) print("Helloow")
+
+# basic while loop
+i <- 10
+while (i > 0) {
+  print("Helluu")
+  i <- i - 1
+}
+
+# basic conditional
+if (is.data.frame(iris)) {
+  print("yes")
+}
+else {
+  print ("no")
+}
+
+# switch
+feelings <- c("sad", "afraid", "angry")
+for (i in feelings) {
+  print(
+    switch(
+      i,
+      happy  = "Glad you're happy!",
+      afraid = "There's nothing to fear.",
+      sad    = "Cheer up!",
+      angry  = "Calm the **** down!"
+    )
+  )
+}
+
+# User-Written Functions --------------------------------------------------
+
+# get param/non-maram summary stats
+mystats <- function(x, parametric = TRUE, print = FALSE) {
+
+  # calculate center and spread
+  if (parametric) {
+    center <- mean(x)
+    spread <- sd(x)
+  } else {
+    center <- median(x)
+    spread <- mad(x)
+  }
+
+  # print
+  if (print & parametric) {
+    cat("Mean = ", center, "\n", "SD = ", spread, "\n", sep = "")
+  } else if (print & !parametric) {
+    cat("Median = ", center, "\n", "MAD = ", spread, "\n", sep = "")
+  }
+
+  # results
+  result <- list(center = center, spread = spread)
+  return(result)
+
+}
+
+# test function
+x <- rnorm(500)
+mystats(x, parametric = FALSE, print = TRUE)
+
+
+# date function, with switch()
+mydate <- function(type = "long") {
+  switch(
+    type,
+    long  = format(Sys.Date(), "%A %B %d %Y"),
+    short = format(Sys.Date(), "%m-%d-%y"),
+    cat(type, "is not a recognized type.\n")
+  )
+}
+
+
+# Aggregation and Reshaping -----------------------------------------------
+
+# transposing
+mtcars[1:5, 1:4]
+t(mtcars[1:5, 1:4])
+
+# aggregation
+aggregate(
+  x    = mtcars,
+  by   = list(mtcars$cyl, mtcars$gear),
+  FUN  = mean,
+  na.rm = TRUE
+)
+
+# melting
+mydata <- data.frame(
+  id   = c(1, 1, 2, 2),
+  time = c(1, 2, 1, 2),
+  x1   = c(5, 3, 6, 2),
+  x2   = c(6, 5, 1, 4)
+)
+molten_data <- melt(mydata, id = c("id", "time"))
+
+# casting
+dcast(molten_data, id + time ~ variable)
