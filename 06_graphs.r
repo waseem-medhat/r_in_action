@@ -2,6 +2,7 @@ library(vcd)
 library(gplots)
 library(plotrix)
 library(sm)
+library(vioplot)
 
 # Bar Plots ---------------------------------------------------------------
 
@@ -115,3 +116,57 @@ cyl_f <- factor(
 )
 
 sm.density.compare(mtcars$mpg, mtcars$cyl, lwd = 2)
+
+
+# Box Plots ---------------------------------------------------------------
+
+# boxplot
+boxplot(mtcars$mpg, main = "Box Plot", ylab = "Miles per Gallon")
+
+# plot statistics
+boxplot.stats(mtcars$mpg)
+
+# side-by-side boxplots w/ notch
+boxplot(mpg ~ cyl, data = mtcars, notch = TRUE, varwidth = TRUE)
+
+# two-factor multiple boxplots
+am_f <- factor(
+  mtcars$am,
+  levels = c(0, 1),
+  labels = c("auto", "standard")
+)
+
+boxplot(mpg ~ cyl_f * am_f, data = mtcars, varwidth = TRUE)
+
+# violin plots
+cyl4 <- mtcars$mpg[mtcars$cyl == 4]
+cyl6 <- mtcars$mpg[mtcars$cyl == 6]
+cyl8 <- mtcars$mpg[mtcars$cyl == 8]
+
+vioplot(
+  cyl4, cyl6, cyl8,
+  col = "darkgoldenrod2",
+  names = c("4 cylinder", "6 cylinder", "8 cylinder")
+)
+
+# dot plot
+dotchart(mtcars$mpg, labels = rownames(mtcars))
+
+# dot plot reorderd
+mpg_ord <- mtcars[order(mtcars$mpg, decreasing = TRUE), ]
+dotchart(mpg_ord$mpg, labels = rownames(mpg_ord))
+
+# enhanced dot plot - example 6.11
+mpg_ord$cyl <- factor(mpg_ord$cyl)
+
+mpg_ord$color[mpg_ord$cyl == 4] <- "tomato3"
+mpg_ord$color[mpg_ord$cyl == 6] <- "steelblue"
+mpg_ord$color[mpg_ord$cyl == 8] <- "darkgreen"
+
+dotchart(
+  mpg_ord$mpg,
+  labels = rownames(mpg_ord),
+  groups = mpg_ord$cyl,
+  color  = mpg_ord$color,
+  pch    = 19
+)
