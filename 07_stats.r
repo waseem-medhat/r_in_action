@@ -1,5 +1,6 @@
 library(doBy)
 library(vcd)
+library(magrittr)
 
 # Descriptive Statistics --------------------------------------------------
 
@@ -49,3 +50,34 @@ doBy::summaryBy(mpg + hp + wt ~ am, data = mtcars, FUN = mystats)
 # grouped summary - psych::describeBy()
 psych::describeBy(mtcars_num, list(am = mtcars$am))
 
+
+# Frequency and Contingency Tables ---------------------------------------------
+
+# one-way table
+oneway <- table(Arthritis$Improved)
+
+# two-way table
+twoway <- xtabs( ~ Treatment + Improved, data = Arthritis)
+
+# margins and proportions
+margin.table(twoway, 1)
+prop.table(twoway, 1) %>% addmargins()
+
+# CrossTable()
+gmodels::CrossTable(Arthritis$Treatment, Arthritis$Improved, chisq = TRUE)
+
+# multidimensional tables
+nway <- table(Arthritis[ , c('Treatment', 'Sex', 'Improved')])
+
+# flatten table
+ftable(nway)
+
+# chi-square
+chisq.test(twoway)
+
+# fisher exact
+fisher.test(twoway)
+
+# mantel haenszel
+threeway <- xtabs( ~ Treatment + Improved + Sex, data = Arthritis)
+mantelhaen.test(threeway)
