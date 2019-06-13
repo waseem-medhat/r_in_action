@@ -81,3 +81,10 @@ fisher.test(twoway)
 # mantel haenszel
 threeway <- xtabs( ~ Treatment + Improved + Sex, data = Arthritis)
 mantelhaen.test(threeway)
+
+# association: phi, cramer's v
+assocstats(twoway)
+
+
+# Correlations -----------------------------------------------------------------
+
