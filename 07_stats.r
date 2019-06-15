@@ -1,6 +1,7 @@
 library(doBy)
 library(vcd)
 library(magrittr)
+library(ggm)
 
 # Descriptive Statistics --------------------------------------------------
 
@@ -87,4 +88,45 @@ assocstats(twoway)
 
 
 # Correlations -----------------------------------------------------------------
+
+states <- state.x77[ , 1:6]
+
+# variance-covariance matrix
+cov(states)
+states[ , "Illiteracy"] %>% var()
+
+# correlation matrices (pearson)
+cor(states)
+
+# correlation matrices (spearman)
+cor(states, method = "spearman")
+
+plot(states[ , c("HS Grad", "Population")])
+
+# nonsquare correlation matrices
+cor(
+  states[ , c("Population", "Income", "Illiteracy", "HS Grad")],
+  states[ , c("Life Exp", "Murder")]
+)
+
+# partial correlation:
+
+paste0(1:ncol(states), ":", colnames(states))
+# [1] "1:Population" "2:Income"     "3:Illiteracy" "4:Life Exp"   "5:Murder"    
+# [6] "6:HS Grad"   
+
+# first two numbers in the vector are indices of variables to be
+# correlated, the rest are the control variable indices
+ggm::pcor(c(1, 5, 2, 3, 6), cov(states))
+
+# correlation significance:
+# base cor.test works for a single pearson correlation
+cor.test(states[ ,3], states[ ,5])
+
+# multiple correlation tests
+print(psych::corr.test(states, use = "complete"), short = FALSE)
+psych::cor.ci(states)
+
+
+# t-tests ----------------------------------------------------------------------
 
