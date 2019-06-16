@@ -2,6 +2,7 @@ library(doBy)
 library(vcd)
 library(magrittr)
 library(ggm)
+library(MASS)  
 
 # Descriptive Statistics --------------------------------------------------
 
@@ -130,3 +131,26 @@ psych::cor.ci(states)
 
 # t-tests ----------------------------------------------------------------------
 
+# independent t-test
+t.test(Prob ~ So, data = UScrime)
+
+# dependent t-test
+t.test(UScrime$U1, UScrime$U2, paired = TRUE)
+
+by(UScrime$Prob, UScrime$So, function (x) {
+  c(median = median(x), IQR = IQR(x))
+})
+
+# non-parametric: mann-whitney
+wilcox.test(Prob ~ So, data = UScrime)
+
+# non-parametric: wilcoxon
+wilcox.test(UScrime$U1, UScrime$U2, paired = TRUE)
+
+# non-parametric: kruskal-wallis
+kruskal.test(Illiteracy ~ state.region, data = states)
+
+# multiple wilcoxon comparisons
+source("~/proj/wilcoxon_multiple.R")
+states_df <- data.frame(state.region, state.x77)
+wmc(Illiteracy ~ state.region, data = states_df, method = "bonferroni")
