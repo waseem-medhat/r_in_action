@@ -1,4 +1,3 @@
-library(car)
 
 # Simple Linear Regression -------------------------------------------------------
 
@@ -36,4 +35,27 @@ lines(women$height, fitted(fit_poly3))
 
 # Multiple Linear Regression ---------------------------------------------------
 
+states <- as.data.frame(
+  state.x77[ ,c("Murder", "Population", "Illiteracy", "Income", "Frost")]
+)
+
+fit_mult <- lm(
+  Murder ~ Population + Illiteracy + Income + Frost,
+  data = states
+)
+
+summary(fit_mult)
+
+# adding interactions
+fit_mult2 <- lm(
+  mpg ~ hp + wt + hp:wt,
+  data = mtcars
+)
+
+summary(fit_mult2)
+
+fit_mult3 <- lm(
+  mpg ~ hp * wt,
+  data = mtcars
+)
 
