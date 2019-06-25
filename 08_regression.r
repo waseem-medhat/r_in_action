@@ -125,3 +125,41 @@ spreadLevelPlot(fit)
 
 # muticollinearity
 vif(sqrt(fit))
+
+
+# Unusual Observations ---------------------------------------------------------
+
+# outliers
+outlierTest(fit)
+
+# high-leverage points
+hat.plot <- function(fit) {
+  p <- length(coefficients(fit))
+  n <- length(fitted(fit))
+  plot(hatvalues(fit), main = "Index Plot of Hat Values")
+  abline(h = c(2, 3) * p / n, col = "red", lty = 2)
+  identify(1:n, hatvalues(fit), names(hatvalues(fit)))
+}
+
+hat.plot(fit)
+
+# cook's distance
+cutoff <- 4 / (nrow(states) - length(fit$coefficients) - 2)
+plot(fit, which = 4, cook.levels = cutoff)
+abline(h = cutoff, lty = 2, col = "red")
+
+{
+  default <- par(no.readonly = TRUE) # save defaults
+  par(mfrow = c(2, 2))
+  plot(fit)
+  par(default)
+}
+
+# added-variable plots
+avPlots(fit, ask = FALSE)
+
+# influence plots
+influencePlot(fit)
+
+
+# Corrective Measures ----------------------------------------------------------
