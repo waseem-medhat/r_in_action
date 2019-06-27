@@ -1,4 +1,6 @@
 library(car)
+library(MASS)
+library(leaps)
 
 # Simple Linear Regression -------------------------------------------------------
 
@@ -161,5 +163,33 @@ avPlots(fit, ask = FALSE)
 # influence plots
 influencePlot(fit)
 
+# box-cox transformation to normality
+powerTransform(states$Murder)
 
-# Corrective Measures ----------------------------------------------------------
+# box-tidwell power transformation
+boxTidwell(Murder ~ Population + Illiteracy, data = states)
+
+
+# Model Selection --------------------------------------------------------------
+
+fit1 <- lm(Murder ~ Population + Illiteracy, data = states)
+fit2 <- lm(Murder ~ Population + Illiteracy + Income + Frost, data = states)
+
+# compare models
+anova(fit1, fit2) # anova tables
+AIC(fit1, fit2)   # AIC
+
+# stepwise regression
+stepAIC(fit2, direction = "backward")
+
+# all subsets regression
+leaps <- regsubsets(
+  Murder ~ Population + Illiteracy + Income + Frost,
+  data = states,
+  nbest = 4
+)
+
+plot(leaps, scale = "adjr2")
+
+subsets(leaps, statistic = "cp")
+abline(1,1)
