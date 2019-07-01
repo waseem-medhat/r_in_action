@@ -1,3 +1,4 @@
+library(dplyr)
 library(multcomp)
 library(gplots)
 library(car)
@@ -78,4 +79,49 @@ ancova(weight ~ gesttime + dose, data = litter)
 ancova(weight ~ gesttime * dose, data = litter)
 
 
-# One-Way ANCOVA ----------------------------------------------------------
+# Two-Way Factorial ANOVA -------------------------------------------------
+
+head(ToothGrowth)
+
+tooth <- ToothGrowth
+tooth$dose <- factor(tooth$dose)
+
+## NOTE: convert the grouping variable to a factor, otherwise it would
+##       be considered as a numeric covariate
+
+# summaries
+tooth %>%
+  group_by(supp, dose) %>%
+  summarize(
+    n    = n(),
+    mean = mean(len),
+    sd   = sd(len))
+
+# anova
+fit <- aov(len ~ supp * dose, data = tooth)
+summary(fit)
+
+# interaction plot - base
+with(
+  tooth,
+  interaction.plot(
+    dose, supp, len,
+    type = "b",
+    col  = c("tomato", "steelblue"),
+    pch  = c(16, 18),
+    main = "Interaction Plot between Dose and Supplement Type"))
+  
+# interaction plot - gplots
+with(
+  tooth,
+  plotmeans(
+    len ~ interaction(supp, dose, sep = " "),
+    connect = list(c(1, 3, 5), c (2, 4, 6)),
+    col = c("darkgreen", "darkgoldenrod"),
+    main = "Interaction Plot with 95% CIs"))
+
+# interaction plot - HH
+with(tooth, interaction2wt(len ~ supp * dose))
+
+
+# Repeated Measures ANOVA -------------------------------------------------
