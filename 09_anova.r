@@ -125,3 +125,39 @@ with(tooth, interaction2wt(len ~ supp * dose))
 
 
 # Repeated Measures ANOVA -------------------------------------------------
+
+# prep
+head(CO2)
+co2 <- CO2
+co2$conc <- factor(co2$conc)
+
+co2ch <- subset(
+  co2,
+  Treatment == "chilled",
+  select = c("Plant", "Type", "conc", "uptake"))
+
+# fit
+fit <- aov(
+  uptake ~ conc * Type + Error(Plant / (conc)),
+  data = co2ch)
+summary(fit)
+
+# interaction plot
+par(las = 2)
+par(mar = c(10, 4, 4, 2))
+with(
+  co2ch,
+  interaction.plot(
+    conc, Type, uptake,
+    type = "b",
+    col  = c("tomato2", "steelblue"),
+    pch  = c(16, 18),
+    main = "Interaction Plot for Plant Type and Concentration"))
+
+boxplot(
+  uptake ~ Type * conc,
+  data = co2ch,
+  col  = c("darkgoldenrod", "green"),
+  main = "Chilled Quebec and Mississippi Plants",
+  xlab = "",
+  ylab = "CO2 dioxide uptake rate (umol/m^2 sec)")
