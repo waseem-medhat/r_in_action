@@ -4,6 +4,7 @@ library(gplots)
 library(car)
 library(effects)
 library(HH)
+library(MASS)
 
 ## NOTE: Anova() in the `car` library can perform type II or III SS
 ##       unlike base R's aov() which uses only type I
@@ -161,3 +162,56 @@ boxplot(
   main = "Chilled Quebec and Mississippi Plants",
   xlab = "",
   ylab = "CO2 dioxide uptake rate (umol/m^2 sec)")
+
+
+# Multivariate ANOVA ------------------------------------------------------
+
+head(UScereal)
+str(UScereal)
+
+cereal <- MASS::UScereal
+cereal$shelf <- factor(cereal$shelf)
+
+# dependent variables
+y <- cbind(cereal$calories, cereal$fat, cereal$sugars)     
+
+# covariance matrix
+cov(y)
+
+# anova fit
+fit <- manova(y ~ cereal$shelf)
+summary(fit)
+summary.aov(fit)
+
+# assumptions
+cent <- colMeans(y)
+n <- nrow(y)
+p <- ncol(y)
+covar <- cov(y)
+d <- mahalanobis(y, cent, covar)
+
+qqplot(qchisq(ppoints(n), df = p), d)
+abline(a = 0, b = 1)
+
+# outliers
+mvoutlier::aq.plot(y)
+
+# robust manova - wilk's test
+rrcov::Wilks.test(y, cereal$shelf, method = "mcd")
+
+
+# ANOVA & Regression ------------------------------------------------------
+
+cholest <- multcomp::cholesterol
+levels(cholest$trt)
+
+# aov fit
+fit_aov <- aov(response ~ trt, data = cholest)
+summary(fit_aov)
+
+# lm fit
+fit_lm <- lm(response ~ trt, data = cholest)
+summary(fit_lm)
+
+# contrasts
+contrasts(cholest$trt)
