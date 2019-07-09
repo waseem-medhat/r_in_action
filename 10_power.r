@@ -70,5 +70,52 @@ pwr.f2.test(
 #       N = v + K + 1
 
 
-# Proportions -------------------------------------------------------------
+# Proportion Tests --------------------------------------------------------
 
+# p's = 0.6, 0.65
+# power = 0.9
+# significance = 0.95
+pwr.2p.test(
+  h = ES.h(0.65, 0.6),
+  power = 0.9,
+  sig.level = 0.05,
+  alternative = "greater"
+)
+
+
+# Chi-Square Test ---------------------------------------------------------
+
+# population: 70% caucasian, 10% african, 20% hispanic
+# promotion : 60% caucasian, 30% african, 30% hispanic
+# expected  : 42% caucasian, 03% african, 10% hispanic
+
+# tables (population vs. expected)
+w <- ES.w2(matrix(c(0.42, 0.28, 0.03, 0.07, 0.1, 0.1), byrow = TRUE, nrow = 3))
+pwr.chisq.test(
+  w = 0.1853,
+  df = 2,
+  sig.level = 0.05,
+  power = 0.9
+)
+
+
+# Power Plots -------------------------------------------------------------
+
+# effect size vs. sample size
+es <- seq(0.1, 0.5, 0.01)
+nes <- length(es)
+
+smpsize <- NULL
+for (i in 1:nes) {
+  result <- pwr.anova.test(
+    k = 5,
+    f = es[i],
+    sig.level = 0.05,
+    power = 0.9)
+  smpsize[i] <- ceiling(result$n)}
+
+plot(
+  smpsize, es,
+  type = "l",
+  lwd = 2,
+  col = "red")
