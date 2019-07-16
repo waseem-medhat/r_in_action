@@ -2,6 +2,8 @@ library(car)
 library(hexbin)
 library(rgl)
 library(RColorBrewer)
+library(corrgram)
+library(vcd)
 
 # Scatter Plots -----------------------------------------------------------
 
@@ -138,3 +140,22 @@ legend(
   pch = plotchar,
   lty = linetype,
   title = "Tree")
+
+
+# Corrgrams ---------------------------------------------------------------
+
+options(digits = 2)
+cor(mtcars)
+
+corrgram(
+  mtcars,
+  order = TRUE,
+  upper.panel = panel.cor,
+  diag.panel  = panel.density)
+
+
+# Mosaic Plots ------------------------------------------------------------
+
+ftable(Titanic)
+mosaic(Titanic, shade = TRUE, legend = TRUE)
+example(mosaic)
