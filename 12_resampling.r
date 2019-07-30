@@ -1,6 +1,7 @@
 library(coin)
 library(boot)
 library(multcomp)
+library(lmPerm)
 
 # Permutation Tests -------------------------------------------------------
 
@@ -64,3 +65,30 @@ wilcoxsign_test(U1 ~ U2, data = crime, distribution = "exact")
 
 
 # Permutation Tests - Linear Models ---------------------------------------
+
+# simple polyomial linear model
+default_lm <- lm(weight ~ height + I(height ^ 2), data = women)
+summary(default_lm)
+
+perm_lm    <- lmp(weight ~ height + I(height ^ 2), data = women)
+summary(perm_lm)
+
+# multiple linear model
+default_mlm <- lm(
+  Murder ~ Population + Illiteracy + Income + Frost,
+  data = states)
+summary(default_mlm)
+
+perm_mlm    <- lmp(
+  Murder ~ Population + Illiteracy + Income + Frost,
+  data = states,
+  perm = "Prob")
+summary(perm_mlm)
+
+# NOTE: anova is done using aovp(), with `seqs =` argument for sequential sums
+#       of squares
+
+
+# Bootstrapping -----------------------------------------------------------
+
+
