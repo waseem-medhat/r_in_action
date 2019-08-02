@@ -91,4 +91,28 @@ summary(perm_mlm)
 
 # Bootstrapping -----------------------------------------------------------
 
+# single statistic
+rsq <- function(formula, data, indices) {
+  d <- data[indices, ]
+  fit <- lm(formula, data = d)
+  return(summary(fit)$r.square)
+}
 
+result <- boot(mtcars, rsq, 1000, formula = mpg ~ wt + disp)
+
+result
+plot(result)
+boot.ci(result, type = c("perc", "bca"))
+
+# multiple statistics
+betas <- function(formula, data, indices) {
+  d <- data[indices, ]
+  fit <- lm(formula, data = d)
+  return(coef(fit))
+}
+
+result <- boot(mtcars, betas, 1000, formula = mpg ~ wt + disp)
+
+result
+plot(result, index = 3)
+boot.ci(result, type = "bca", index = 3)
