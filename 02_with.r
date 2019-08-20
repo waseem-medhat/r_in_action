@@ -9,8 +9,8 @@ with(mtcars, {
 
 # assignments
 with(mtcars, {
-  mpg_summary <- summary(mpg)
-  mpg_summary2 <<- summary(mpg)
+  mpg_summary <- summary(mpg)          # "local" assignment
+  mpg_summary2 <<- summary(mpg)        # global assignment
 })
 
 mpg_summary
